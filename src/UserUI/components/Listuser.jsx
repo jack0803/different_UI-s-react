@@ -9,11 +9,18 @@ const ListUser = () => {
     page:1,
     limit:8
   });
+
+  const deleteUser = (id) => {
+    axios.delete(`${BaseURL}/delete?id=${id}`).then((response) => {
+      console.log(response.data);
+    });
+  }
+
   React.useEffect(() => {
     axios.get(`${BaseURL}/list?page=${pageOption.page}&limit=${pageOption.limit}`).then((response) => {
       setUserList(response.data);
     });
-  }, [pageOption.page]);
+  }, [pageOption.page , deleteUser ]);
 
   const handlePreviousPage = () => {
     setPageOption({ ...pageOption ,page: pageOption.page-1 });
@@ -23,6 +30,8 @@ const ListUser = () => {
     console.log(pageOption);
     setPageOption({ ...pageOption ,page: pageOption.page+1 });
   }
+
+  
 
   console.log(userList);
   if (!userList) return null;
@@ -41,7 +50,7 @@ const ListUser = () => {
                 <li className="list-group-item">{user.email}</li>
               </ul>
               <button className=" m-2 btn btn-info" > Update </button>
-              <button className=" m-2 btn btn-warning" > Delete </button>
+              <button className=" m-2 btn btn-warning" onClick={() => deleteUser(user.id)} > Delete </button>
             </div>
           </div>
         ))}
